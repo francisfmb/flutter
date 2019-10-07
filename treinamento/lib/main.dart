@@ -1,5 +1,3 @@
-import 'dart:ui' as prefix0;
-
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -41,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*  drawer: Drawer(
+      /* drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -108,7 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ), */
-
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
