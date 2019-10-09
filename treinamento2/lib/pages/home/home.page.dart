@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:treinamento2/pages/login/login.page.dart';
+//import 'pages/login/login.page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,6 +10,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<FirebaseUser> _handleCreateUser(String email, String pass) async {
+    final FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: pass,
+    ))
+        .user;
+    return user;
+  }
+
+  Future<FirebaseUser> _handleLogin() async {
+    final AuthResult auth = await _auth.signInWithEmailAndPassword(
+      email: 'ffumagalli23@gmail.com',
+      password: '123456',
+    );
+
+    return auth.user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +76,21 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         color: Colors.blue,
-                        onPressed: () {},
+                        onPressed: () async {
+                          print('novo usuario');
+                          //Criar NOVO usuario
+                          try {
+                            //_handleCreateUser(email,pass);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginPage(),
+                              ),
+                            );
+                          } catch (e) {
+                            print(e.toString());
+                          }
+                        },
                       ),
                     ),
                     Container(
@@ -77,6 +113,11 @@ class _HomePageState extends State<HomePage> {
                           width: 1,
                         ),
                         onPressed: () async {
+                          try {
+                            _handleLogin();
+                          } catch (e) {
+                            print(e.toString());
+                          }
                           LocationData currentLocation;
                           var location = new Location();
 
