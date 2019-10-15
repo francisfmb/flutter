@@ -3,6 +3,7 @@ import 'package:treinamento2/pages/animations/animations.dart';
 import 'package:treinamento2/pages/animations/images.dart';
 import 'package:treinamento2/pages/login/cadastro.page.dart';
 import 'package:treinamento2/pages/login/facebook.login.dart';
+import 'package:treinamento2/pages/login/login.page.dart';
 //import 'pages/login/login.page.dart';
 
 class HomePage extends StatefulWidget {
@@ -48,8 +49,15 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () async {
                           //Criar NOVO usuario
                           try {
-                            if (await LoginFB.login()) {
+                            Map profileFB = await LoginFB.login();
+                            if (profileFB.isNotEmpty) {
                               print('logado');
+                              Navigator.push(
+                                context,
+                                FadeRoute(
+                                  page: LoginPage(),
+                                ),
+                              );
                             } else {
                               print('NÃO logado');
                             }

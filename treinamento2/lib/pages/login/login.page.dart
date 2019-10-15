@@ -1,10 +1,15 @@
+import 'dart:convert';
 import 'dart:core';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:treinamento2/pages/animations/animations.dart';
 import 'package:treinamento2/pages/animations/images.dart';
-import 'package:treinamento2/pages/login/facebook.login.dart';
+import 'package:treinamento2/pages/home/home.page.dart';
+import 'package:treinamento2/pages/login/facebook.login.dart' as fb;
 
 class LoginPage extends StatefulWidget {
+  // LoginPage(String profile);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -22,6 +27,10 @@ class _LoginPageState extends State<LoginPage> {
               flex: 3,
             ),
             Expanded(
+              child: Text('test'),
+              flex: 1,
+            ),
+            Expanded(
               child: Container(
                 child: Column(
                   children: <Widget>[
@@ -34,7 +43,8 @@ class _LoginPageState extends State<LoginPage> {
                         textColor: Colors.white,
                         child: Text(
                           //TODO adicionar nome recuperado do FB
-                          "Continuar como ",
+                          "Continuar como ", // + fb.getToken(), //+ name,
+
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -70,7 +80,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         onPressed: () async {
                           try {
-                            LoginFB.logOut();
+                            fb.LoginFB.logOut();
+                            //TODO mostrar pop up de logoff
+                            Navigator.push(
+                              context,
+                              FadeRoute(
+                                page: HomePage(),
+                              ),
+                            );
                           } catch (e) {
                             print(e.toString());
                           }
@@ -80,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-              flex: 3,
+              flex: 2,
             ),
           ],
         ),
