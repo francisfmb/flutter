@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
-import 'package:treinamento2/pages/login/login.page.dart';
+import 'package:treinamento2/pages/animations/animations.dart';
+import 'package:treinamento2/pages/animations/images.dart';
+import 'package:treinamento2/pages/login/cadastro.page.dart';
+import 'package:treinamento2/pages/login/facebook.login.dart';
 //import 'pages/login/login.page.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,47 +11,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<FirebaseUser> _handleCreateUser(String email, String pass) async {
-    final FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: pass,
-    ))
-        .user;
-    return user;
-  }
-
-  Future<FirebaseUser> _handleLogin() async {
-    final AuthResult auth = await _auth.signInWithEmailAndPassword(
-      email: 'ffumagalli23@gmail.com',
-      password: '123456',
-    );
-
-    return auth.user;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              "assets/img/back.jpg",
-            ),
-            fit: BoxFit.fill,
-          ),
-        ),
+        decoration: Background(),
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Center(
-                child: Image.asset(
-                  "assets/img/logo.png",
-                  width: 100,
-                  height: 100,
-                ),
-              ),
+              child: Logo(),
               flex: 3,
             ),
             Expanded(
@@ -77,16 +46,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         color: Colors.blue,
                         onPressed: () async {
-                          print('novo usuario');
                           //Criar NOVO usuario
                           try {
-                            //_handleCreateUser(email,pass);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginPage(),
-                              ),
-                            );
+                            if (await LoginFB.login()) {
+                              print('logado');
+                            } else {
+                              print('NÃO logado');
+                            }
                           } catch (e) {
                             print(e.toString());
                           }
@@ -101,9 +67,9 @@ class _HomePageState extends State<HomePage> {
                         shape: StadiumBorder(),
                         textColor: Colors.white,
                         child: Text(
-                          "ENTRAR COM O NÚMERO DE TELEFONE",
+                          "LOGIN COM E-MAIL",
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -114,26 +80,15 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onPressed: () async {
                           try {
-                            _handleLogin();
+                            //_handleCreateUser(email,pass);
+                            Navigator.push(
+                              context,
+                              FadeRoute(
+                                page: CadastroPage(),
+                              ),
+                            );
                           } catch (e) {
                             print(e.toString());
-                          }
-                          LocationData currentLocation;
-                          var location = new Location();
-
-                          try {
-                            currentLocation = await location.getLocation();
-                            print(
-                              "Latitude: " +
-                                  currentLocation.latitude.toString(),
-                            );
-                            print(
-                              "Longitude: " +
-                                  currentLocation.longitude.toString(),
-                            );
-                          } on Exception catch (e) {
-                            print(e);
-                            currentLocation = null;
                           }
                         },
                       ),
